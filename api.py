@@ -1,3 +1,5 @@
+from random import choice
+
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
@@ -10,12 +12,15 @@ words = [{'id': 11, 'name': 'Cow', 'imageurl': 'cow.jpg'},
          {'id': 12, 'name': 'Dog', 'imageurl': 'dog.jpg'},
          {'id': 13, 'name': 'Mouse', 'imageurl': 'mouse.jpg'},
          {'id': 14, 'name': 'Train', 'imageurl': 'train.jpeg'},
-         {'id': 15, 'name': 'Magneta', 'imageurl': 'mock-image.jpg'},
-         {'id': 16, 'name': 'RubberMan', 'imageurl': 'mock-image.jpg'},
-         {'id': 17, 'name': 'Dynama', 'imageurl': 'mock-image.jpg'},
-         {'id': 18, 'name': 'Dr IQ', 'imageurl': 'mock-image.jpg'},
-         {'id': 19, 'name': 'Magma', 'imageurl': 'mock-image.jpg'},
-         {'id': 20, 'name': 'Tornado', 'imageurl': 'mock-image.jpg'}
+         {'id': 16, 'name': 'Goose', 'imageurl': '318px-Domestic_Goose_(2).jpg'},
+         {'id': 17, 'name': 'Horse', 'imageurl': '320px-Horse_2005-08-06_(Cheval).jpg'},
+         {'id': 18, 'name': 'Juice', 'imageurl': 'juice-306748_960_720.png'},
+         {'id': 19, 'name': 'Pig', 'imageurl': 'pig.jpg'},
+         {'id': 20, 'name': 'Rooster', 'imageurl': 'rooster.jpg'},
+         {'id': 22, 'name': 'Mama', 'imageurl': 'mama.jpg'},
+         {'id': 23, 'name': 'Papa', 'imageurl': 'papa.jpg'},
+         {'id': 24, 'name': 'Sasha', 'imageurl': 'sasha.jpg'},
+         {'id': 25, 'name': 'Dima', 'imageurl': 'dima.jpg'}
          ]
 
 words_learned = list()
@@ -23,8 +28,22 @@ words_learned = list()
 
 class Words(Resource):
     def get(self):
+        global words_learned
+
+        if len(words) - len(words_learned) < 3:
+            print(len(words))
+            print(len(words_learned))
+            words_learned = list()
+
         words_not_learned = [word for word in words if word['name'] not in words_learned]
-        return jsonify(words_not_learned[0:3])
+
+        words_to_learn = list()
+        while len(words_to_learn) < 3:
+            candidate = choice(words_not_learned)
+            if candidate not in words_to_learn:
+                words_to_learn.append(candidate)
+
+        return jsonify(words_to_learn)
 
 
 class WordsToLearn(Resource):
@@ -67,14 +86,6 @@ class WordLearned(Resource):
         print(args)
         words_learned.append(args['name'])
         return args
-        """
-        for word in words_learned:
-            if word['id'] == word_id:
-                return 'The word already exists'
-            else:
-                words_learned.append(request.form['data'])
-                return word
-        """
 
 
 api.add_resource(Words, '/words')

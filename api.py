@@ -1,32 +1,42 @@
 from random import choice
 
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
+
+from pprint import pprint
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-words = [{'id': 11, 'name': 'Cow', 'imageurl': 'cow.jpg'},
-         {'id': 12, 'name': 'Dog', 'imageurl': 'dog.jpg'},
-         {'id': 13, 'name': 'Mouse', 'imageurl': 'mouse.jpg'},
-         {'id': 14, 'name': 'Train', 'imageurl': 'train.jpeg'},
-         {'id': 16, 'name': 'Goose', 'imageurl': '318px-Domestic_Goose_(2).jpg'},
-         {'id': 17, 'name': 'Horse', 'imageurl': '320px-Horse_2005-08-06_(Cheval).jpg'},
-         {'id': 18, 'name': 'Juice', 'imageurl': 'juice-306748_960_720.png'},
-         {'id': 19, 'name': 'Pig', 'imageurl': 'pig.jpg'},
-         {'id': 20, 'name': 'Rooster', 'imageurl': 'rooster.jpg'},
-         {'id': 22, 'name': 'Mama', 'imageurl': 'mama.jpg'},
-         {'id': 23, 'name': 'Papa', 'imageurl': 'papa.jpg'},
-         {'id': 24, 'name': 'Sasha', 'imageurl': 'sasha.jpg'},
-         {'id': 25, 'name': 'Dima', 'imageurl': 'dima.jpg'}
+words = [{'id': 1, 'name': 'cow', 'imageurl': 'cow.jpg'},
+         {'id': 2, 'name': 'dog', 'imageurl': 'dog.jpg'},
+         {'id': 3, 'name': 'mouse', 'imageurl': 'mouse.jpg'},
+         {'id': 4, 'name': 'train', 'imageurl': 'train.jpeg'},
+         {'id': 5, 'name': 'goose', 'imageurl': '318px-Domestic_Goose_(2).jpg'},
+         {'id': 6, 'name': 'horse', 'imageurl': '320px-Horse_2005-08-06_(Cheval).jpg'},
+         {'id': 7, 'name': 'juice', 'imageurl': 'juice-306748_960_720.png'},
+         {'id': 8, 'name': 'pig', 'imageurl': 'pig.jpg'},
+         {'id': 9, 'name': 'rooster', 'imageurl': 'rooster.jpg'},
+         {'id': 10, 'name': 'mama', 'imageurl': 'mama.jpg'},
+         {'id': 11, 'name': 'papa', 'imageurl': 'papa.jpg'},
+         {'id': 12, 'name': 'sasha', 'imageurl': 'sasha.jpg'},
+         {'id': 13, 'name': 'dima', 'imageurl': 'dima.jpg'},
+         {'id': 14, 'name': 'cat', 'imageurl': '320px-Felis_catus-cat_on_snow.jpg'}
          ]
 
 words_learned = list()
 
 
+word_parser = reqparse.RequestParser()
+word_parser.add_argument('id', type=int)
+word_parser.add_argument('name', type=str)
+word_parser.add_argument('imageurl', type=str)
+
+
 class Words(Resource):
+
     def get(self):
         global words_learned
 
@@ -45,36 +55,57 @@ class Words(Resource):
 
         return jsonify(words_to_learn)
 
+    def post(self):
+        """Add new word."""
+        new_word = word_parser.parse_args()
+        # Generate ID for the word
+        new_word['id'] = len(words) + 1
+        words.append(new_word)
+        pprint(words)
+        return new_word
 
+    def put(self):
+        """Update word."""
+        word_to_update = word_parser.parse_args()
+        for word in words:
+            if word['id'] == word_to_update['id']:
+                word_index = words.index(word)
+                words.remove(word)
+                words.insert(word_index, word_to_update)
+        pprint(words)
+        return word_to_update
+
+
+"""
+# FINISH LATER
 class WordsToLearn(Resource):
     def get(self, number_of_words):
         if 0 < number_of_words < 10:
             return jsonify(words[0:number_of_words])
         else:
             return 'Error'
+"""
 
 
-class Word(Resource):
+class WordId(Resource):
+
     def get(self, word_id):
         for word in words:
             if word['id'] == word_id:
-                return word
-            else:
-                return 'Error'
+                return jsonify(word)
+        else:
+            return 'Error'
 
-    def put(self, word_id):
+
+class SearchWords(Resource):
+    """Returns all heroes, which have the term in their name."""
+
+    def get(self, term):
+        output = list()
         for word in words:
-            if word['id'] == word_id:
-                return 'The word already exists'
-            else:
-                words.append(request.form['data'])
-                return word
-
-
-word_parser = reqparse.RequestParser()
-word_parser.add_argument('id', type=int)
-word_parser.add_argument('name', type=str)
-word_parser.add_argument('imageurl', type=str)
+            if term in word['name']:
+                output.append(word)
+        return jsonify(output)
 
 
 class WordLearned(Resource):
@@ -83,14 +114,14 @@ class WordLearned(Resource):
 
     def put(self):
         args = word_parser.parse_args()
-        print(args)
         words_learned.append(args['name'])
         return args
 
 
 api.add_resource(Words, '/words')
-api.add_resource(WordsToLearn, '/words/<int:number_of_words>')
-api.add_resource(Word, '/word/<int:word_id>')
+# api.add_resource(WordsToLearn, '/words/<int:number_of_words>')
+api.add_resource(WordId, '/words/<int:word_id>')
+api.add_resource(SearchWords, '/words/search/<string:term>')
 api.add_resource(WordLearned, '/learned')
 
 if __name__ == '__main__':

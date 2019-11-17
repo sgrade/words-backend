@@ -2,6 +2,8 @@ from random import choice
 
 from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
+
+# Enable CORS (cross-origin resource sharing) if frontend and backend runs on the same server (e.g. local dev host).
 # from flask_cors import CORS
 
 from pprint import pprint
@@ -10,6 +12,7 @@ app = Flask(__name__)
 # CORS(app)
 api = Api(app)
 
+# Should move to a database
 words = [{'id': 1, 'name': 'cow', 'imageurl': 'cow.jpg'},
          {'id': 2, 'name': 'dog', 'imageurl': 'dog.jpg'},
          {'id': 3, 'name': 'mouse', 'imageurl': 'mouse.jpg'},
@@ -26,9 +29,11 @@ words = [{'id': 1, 'name': 'cow', 'imageurl': 'cow.jpg'},
          {'id': 14, 'name': 'cat', 'imageurl': '320px-Felis_catus-cat_on_snow.jpg'}
          ]
 
+# Stores learned words
 words_learned = list()
 
 
+# Parses HTML request. TODO(romanklyuev): replace with modern alternative (check the docs)
 word_parser = reqparse.RequestParser()
 word_parser.add_argument('id', type=int)
 word_parser.add_argument('name', type=str)
@@ -56,7 +61,7 @@ class Words(Resource):
         return jsonify(words_to_learn)
 
     def post(self):
-        """Add new word."""
+        """Adds new word."""
         new_word = word_parser.parse_args()
         # Generate ID for the word
         new_word['id'] = len(words) + 1
@@ -65,7 +70,7 @@ class Words(Resource):
         return new_word
 
     def put(self):
-        """Update word."""
+        """Updates the word."""
         word_to_update = word_parser.parse_args()
         for word in words:
             if word['id'] == word_to_update['id']:
@@ -98,9 +103,10 @@ class WordId(Resource):
 
 
 class SearchWords(Resource):
-    """Returns all heroes, which have the term in their name."""
 
     def get(self, term):
+        """Returns all words, which have the term in their name."""
+
         output = list()
         for word in words:
             if term in word['name']:
@@ -109,10 +115,14 @@ class SearchWords(Resource):
 
 
 class WordLearned(Resource):
+    """Manages words, which current user know (learned)."""
+
     def get(self):
+        """Returns learned words."""
         return words_learned
 
     def put(self):
+        """Adds new word, that have been just learned, to the learned words."""
         args = word_parser.parse_args()
         words_learned.append(args['name'])
         return args

@@ -3,13 +3,13 @@ from random import choice
 from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
 
-# Enable CORS (cross-origin resource sharing) if frontend and backend runs on the same server (e.g. local dev host).
-# from flask_cors import CORS
+# Enable CORS (cross-origin resource sharing)
+from flask_cors import CORS
 
 from pprint import pprint
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 api = Api(app)
 
 # Should move to a database

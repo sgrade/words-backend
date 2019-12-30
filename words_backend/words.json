@@ -1,0 +1,16 @@
+{
+        "1": {"id": 1, "name": "cow", "imageurl": "cow.jpg"},
+        "2": {"id": 2, "name": "dog", "imageurl": "dog.jpg"},
+        "3": {"id": 3, "name": "mouse", "imageurl": "mouse.jpg"},
+        "4": {"id": 4, "name": "train", "imageurl": "train.jpeg"},
+        "5": {"id": 5, "name": "goose", "imageurl": "318px-Domestic_Goose_(2).jpg"},
+        "6": {"id": 6, "name": "horse", "imageurl": "320px-Horse_2005-08-06_(Cheval).jpg"},
+        "7": {"id": 7, "name": "juice", "imageurl": "juice-306748_960_720.png"},
+        "8": {"id": 8, "name": "pig", "imageurl": "pig.jpg"},
+        "9": {"id": 9, "name": "rooster", "imageurl": "rooster.jpg"},
+        "10": {"id": 10, "name": "mama", "imageurl": "mama.jpg"},
+        "11": {"id": 11, "name": "papa", "imageurl": "papa.jpg"},
+        "12": {"id": 12, "name": "sasha", "imageurl": "sasha.jpg"},
+        "13": {"id": 13, "name": "dima", "imageurl": "dima.jpg"},
+        "14": {"id": 14, "name": "cat", "imageurl": "320px-Felis_catus-cat_on_snow.jpg"}
+}

@@ -1,5 +1,7 @@
 # words-backend
-Python backend for Words app
+Python backend for Words app.
+
+swagger-server folder is [auto-generated](https://github.com/sgrade/words-api-python-flask) by Swagger Codegen from [words-api](https://github.com/sgrade/words-api)
 
 # Deployment
 gcloud app deploy

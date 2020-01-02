@@ -5,7 +5,6 @@ from swagger_server.models.words import Words  # noqa: E501
 from swagger_server import util
 
 
-
 def find_words_by_name(term):  # noqa: E501
     """Find Words by name
 

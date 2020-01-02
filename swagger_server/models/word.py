@@ -14,30 +14,30 @@ class Word(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, name: str=None, photo_urls: List[str]=None):  # noqa: E501
+    def __init__(self, id: int=None, name: str=None, imageurl: str=None):  # noqa: E501
         """Word - a model defined in Swagger
 
         :param id: The id of this Word.  # noqa: E501
         :type id: int
         :param name: The name of this Word.  # noqa: E501
         :type name: str
-        :param photo_urls: The photo_urls of this Word.  # noqa: E501
-        :type photo_urls: List[str]
+        :param imageurl: The imageurl of this Word.  # noqa: E501
+        :type imageurl: str
         """
         self.swagger_types = {
             'id': int,
             'name': str,
-            'photo_urls': List[str]
+            'imageurl': str
         }
 
         self.attribute_map = {
             'id': 'id',
             'name': 'name',
-            'photo_urls': 'photoUrls'
+            'imageurl': 'imageurl'
         }
         self._id = id
         self._name = name
-        self._photo_urls = photo_urls
+        self._imageurl = imageurl
 
     @classmethod
     def from_dict(cls, dikt) -> 'Word':
@@ -95,24 +95,24 @@ class Word(Model):
         self._name = name
 
     @property
-    def photo_urls(self) -> List[str]:
-        """Gets the photo_urls of this Word.
+    def imageurl(self) -> str:
+        """Gets the imageurl of this Word.
 
 
-        :return: The photo_urls of this Word.
-        :rtype: List[str]
+        :return: The imageurl of this Word.
+        :rtype: str
         """
-        return self._photo_urls
+        return self._imageurl
 
-    @photo_urls.setter
-    def photo_urls(self, photo_urls: List[str]):
-        """Sets the photo_urls of this Word.
+    @imageurl.setter
+    def imageurl(self, imageurl: str):
+        """Sets the imageurl of this Word.
 
 
-        :param photo_urls: The photo_urls of this Word.
-        :type photo_urls: List[str]
+        :param imageurl: The imageurl of this Word.
+        :type imageurl: str
         """
-        if photo_urls is None:
-            raise ValueError("Invalid value for `photo_urls`, must not be `None`")  # noqa: E501
+        if imageurl is None:
+            raise ValueError("Invalid value for `imageurl`, must not be `None`")  # noqa: E501
 
-        self._photo_urls = photo_urls
+        self._imageurl = imageurl

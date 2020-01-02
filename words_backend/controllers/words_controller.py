@@ -1,8 +1,22 @@
 import connexion
 import six
 
+from swagger_server.models.word import Word  # noqa: E501
 from swagger_server.models.words import Words  # noqa: E501
 from swagger_server import util
+
+import json
+from random import choice
+
+
+with open('words_backend/words.json', 'r') as words_file:
+    words = json.load(words_file)
+
+with open('words_backend/users.json', 'r') as users_file:
+    users = json.load(users_file)
+
+with open('words_backend/user1_words.json', 'r') as user1_words_file:
+    user1_words = json.load(user1_words_file)
 
 
 def find_words_by_name(term):  # noqa: E501
@@ -15,13 +29,7 @@ def find_words_by_name(term):  # noqa: E501
 
     :rtype: List[Words]
     """
-    # return 'do some magic!'
-
-    output = list()
-    for word in words:
-        if term in word['name']:
-            output.append(word)
-    return output
+    return 'do some magic!'
 
 
 def find_words_by_status(status):  # noqa: E501
@@ -37,7 +45,7 @@ def find_words_by_status(status):  # noqa: E501
     return 'do some magic!'
 
 
-def get_words_to_learn(limit=None, status=None):  # noqa: E501
+def get_words(limit=None, status=None):  # noqa: E501
     """Get words to learn
 
     Returns number of words to learn # noqa: E501
@@ -49,25 +57,71 @@ def get_words_to_learn(limit=None, status=None):  # noqa: E501
 
     :rtype: Words
     """
-    # return 'do some BEST magic!'
-    
     limit = 3
 
-    #TODO(sgrade): check if needed
-    global words_learned
-
-    # Have the user learned all the words and need to reset the learning?
-    if len(words) - len(words_learned_all[1]) < limit:
-        words_learned_all[1] = list()
+    # TODO(sgrade): check if needed
+    # global words_learned
 
     # Which words the user haven't learned yet?
-    words_not_learned = [word for word in words if word['name'] not in words_learned_all[1]]
+    word_ids_to_learn = list()
+    words_not_learned = list()
+    # Words, which the user already started to learn
+    for word_id, right_answers in user1_words.items():
+        if right_answers < 10:
+            word_ids_to_learn.append(word_id)
+        if len(word_ids_to_learn) == limit:
+            break
+    if len(word_ids_to_learn) < limit:
+        words_not_learned = [str(word['id']) for word in list(words.values()) if
+                             str(word['id']) not in word_ids_to_learn]
+        while len(word_ids_to_learn) < limit:
+            candidate = choice(words_not_learned)
+            if candidate not in word_ids_to_learn:
+                word_ids_to_learn.append(candidate)
 
     words_to_learn = list()
-    while len(words_to_learn) < limit:
-        candidate = choice(words_not_learned)
-        if candidate not in words_to_learn:
-            words_to_learn.append(candidate)
+    for word_id in word_ids_to_learn:
+        words_to_learn.append(words[word_id])
+
+    # Have the user learned all the words and need to reset the learning?
+    # TODO(sgrade)
 
     return words_to_learn
 
+
+def mark_word_learned(body):  # noqa: E501
+    """Update word status for the user
+
+    This can only be done by the logged in user. # noqa: E501
+
+    :param body: Word object
+    :type body: dict | bytes
+
+    :rtype: None
+    """
+
+    if connexion.request.is_json:
+        body = Word.from_dict(connexion.request.get_json())  # noqa: E501
+
+        word_id = body.id
+        print(word_id)
+
+        # JSON keys must be strings
+        word_id_str = str(word_id)
+        if word_id_str not in user1_words:
+            user1_words[word_id_str] = 1
+        else:
+            # To prevent endless repetition counter
+            if user1_words[word_id_str] == 10:
+                pass
+            else:
+                user1_words[word_id_str] += 1
+
+        # Writing to file doesn't work on GCP
+        # OSError: [Errno 30] Read-only file system: 'words_backend/user1_words.json'
+        # with open('words_backend/user1_words.json', 'w') as user1_words_file:
+        #     json.dump(user1_words, user1_words_file)
+
+        return True
+
+    return False

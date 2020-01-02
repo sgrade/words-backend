@@ -16,16 +16,13 @@ servers:
   description: SwaggerHub API Auto Mocking
 tags:
 - name: word
-  description: Operations with individual word
-  externalDocs:
-    description: Find out more
-    url: https://github.com/sgrade/words-backend
+  description: Create, read, update, delete words in the database
 - name: words
-  description: Operations with multiple words
+  description: Learn words
 - name: store
   description: Store
 - name: user
-  description: Operations about user
+  description: Create, read, update, delete users
 paths:
   /word:
     put:
@@ -46,8 +43,8 @@ paths:
     post:
       tags:
       - word
-      summary: Add a new word to the store
-      operationId: add_word
+      summary: Create a new word in the database
+      operationId: create_word
       requestBody:
         $ref: '#/components/requestBodies/Word'
       responses:
@@ -172,6 +169,64 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       x-openapi-router-controller: words_backend.controllers.word_controller
+  /words:
+    get:
+      tags:
+      - words
+      summary: Get words to learn
+      description: Returns number of words to learn
+      operationId: get_words
+      parameters:
+      - name: limit
+        in: query
+        description: number of words to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 3
+          type: integer
+          default: 3
+      - name: status
+        in: query
+        description: status of words to return
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - notStarted
+            - inProgress
+            - learned
+        examples:
+          oneStatus:
+            summary: Example of a single status
+            value:
+            - inProgress
+          multipleStatuses:
+            summary: Example of multiple statuses
+            value:
+            - notStarted
+            - inProgress
+            - learned
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Words'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Words'
+        "400":
+          description: Invalid number of words supplied
+        "404":
+          description: Words not found
+      x-openapi-router-controller: words_backend.controllers.words_controller
   /words/findByStatus:
     get:
       tags:
@@ -246,6 +301,26 @@ paths:
                   $ref: '#/components/schemas/Words'
         "400":
           description: Invalid status value
+      x-openapi-router-controller: words_backend.controllers.words_controller
+  /learned:
+    put:
+      tags:
+      - words
+      summary: Update word status for the user
+      description: This can only be done by the logged in user.
+      operationId: mark_word_learned
+      requestBody:
+        description: Word object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
+        required: true
+      responses:
+        "400":
+          description: Invalid word supplied
+        "404":
+          description: Word not found
       x-openapi-router-controller: words_backend.controllers.words_controller
   /store/inventory:
     get:
@@ -534,96 +609,6 @@ paths:
         "404":
           description: User not found
       x-openapi-router-controller: words_backend.controllers.user_controller
-  /user/{username}/words_to_learn:
-    get:
-      tags:
-      - user
-      summary: Get words to learn
-      description: Returns number of words to learn
-      operationId: get_words_to_learn
-      parameters:
-      - name: username
-        in: path
-        description: name that need to be updated
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: limit
-        in: query
-        description: number of words to return
-        required: false
-        style: form
-        explode: true
-        schema:
-          minimum: 3
-          type: integer
-          default: 3
-      - name: status
-        in: query
-        description: status of words to return
-        required: false
-        style: form
-        explode: false
-        schema:
-          type: array
-          items:
-            type: string
-            enum:
-            - notStarted
-            - inProgress
-            - learned
-        examples:
-          oneStatus:
-            summary: Example of a single status
-            value:
-            - inProgress
-          multipleStatuses:
-            summary: Example of multiple statuses
-            value:
-            - notStarted
-            - inProgress
-            - learned
-      responses:
-        "200":
-          description: successful operation
-        "400":
-          description: Invalid number of words supplied
-        "404":
-          description: Words not found
-      x-openapi-router-controller: words_backend.controllers.user_controller
-  /user/{username}/{wordId}:
-    put:
-      tags:
-      - user
-      summary: Update word status for the user
-      description: This can only be done by the logged in user.
-      operationId: mark_word_learned
-      parameters:
-      - name: username
-        in: path
-        description: name that need to be updated
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: wordId
-        in: path
-        description: ID of word to update
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "400":
-          description: Invalid user or word ID supplied
-        "404":
-          description: User or word not found
-      x-openapi-router-controller: words_backend.controllers.user_controller
 components:
   schemas:
     Order:
@@ -695,8 +680,8 @@ components:
         name: User
     Word:
       required:
+      - imageurl
       - name
-      - photoUrls
       type: object
       properties:
         id:
@@ -704,19 +689,13 @@ components:
           format: int64
         name:
           type: string
-          example: doggie
-        photoUrls:
-          type: array
-          xml:
-            name: photoUrl
-            wrapped: true
-          items:
-            type: string
+          example: cow
+        imageurl:
+          type: string
+          example: cow.jpg
       example:
-        photoUrls:
-        - photoUrls
-        - photoUrls
-        name: doggie
+        imageurl: cow.jpg
+        name: cow
         id: 0
       xml:
         name: Word

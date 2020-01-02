@@ -6,8 +6,8 @@ from swagger_server.models.word import Word  # noqa: E501
 from swagger_server import util
 
 
-def add_word(body):  # noqa: E501
-    """Add a new word to the store
+def create_word(body):  # noqa: E501
+    """Create a new word in the database
 
      # noqa: E501
 

@@ -65,20 +65,23 @@ def get_words(limit=None, status=None):  # noqa: E501
     # Which words the user haven't learned yet?
     word_ids_to_learn = list()
     words_not_learned = list()
-    # Words, which the user already started to learn
-    for word_id, right_answers in user1_words.items():
-        if right_answers < 10:
-            word_ids_to_learn.append(word_id)
-        if len(word_ids_to_learn) == limit:
-            break
-    if len(word_ids_to_learn) < limit:
-        words_not_learned = [str(word['id']) for word in list(words.values()) if
-                             str(word['id']) not in word_ids_to_learn]
-        while len(word_ids_to_learn) < limit:
-            candidate = choice(words_not_learned)
-            if candidate not in word_ids_to_learn:
-                word_ids_to_learn.append(candidate)
+    
+    word_ids = list(words.keys())
 
+    # Looking for word IDs to learn
+    # All words
+    while len(word_ids_to_learn) < limit:
+        id = choice(word_ids)
+
+        # Words, which the user already started to learn
+        if id in user1_words.keys():
+            # Number or right answers
+            if user1_words[id] < 10:
+                word_ids_to_learn.append(id)
+        # This word we haven't started yet
+        else:
+            word_ids_to_learn.append(id)
+        
     words_to_learn = list()
     for word_id in word_ids_to_learn:
         words_to_learn.append(words[word_id])
@@ -122,6 +125,7 @@ def mark_word_learned(body):  # noqa: E501
         # with open('words_backend/user1_words.json', 'w') as user1_words_file:
         #     json.dump(user1_words, user1_words_file)
 
+        print(user1_words)
         return True
 
     return False

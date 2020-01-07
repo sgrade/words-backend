@@ -73,15 +73,19 @@ def get_words(limit=None, status=None):  # noqa: E501
     while len(word_ids_to_learn) < limit:
         id = choice(word_ids)
 
-        # Words, which the user already started to learn
-        if id in user1_words.keys():
-            # Number or right answers
-            if user1_words[id] < 10:
+        # Avoid duplicates
+        if id not in word_ids_to_learn:
+
+            # Words, which the user already started to learn
+            if id in user1_words.keys():
+                # Number or right answers. If 10, then the word is learned.
+                if user1_words[id] < 10:
+                    word_ids_to_learn.append(id)
+            # This word we haven't started yet
+            else:
                 word_ids_to_learn.append(id)
-        # This word we haven't started yet
-        else:
-            word_ids_to_learn.append(id)
         
+    # Making list of words from the IDs
     words_to_learn = list()
     for word_id in word_ids_to_learn:
         words_to_learn.append(words[word_id])

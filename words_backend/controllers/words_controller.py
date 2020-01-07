@@ -8,15 +8,30 @@ from swagger_server import util
 import json
 from random import choice
 
+from google.cloud import firestore
+from swagger_server.models.words import Words
 
+"""
 with open('words_backend/words.json', 'r') as words_file:
     words = json.load(words_file)
+"""
 
 with open('words_backend/users.json', 'r') as users_file:
     users = json.load(users_file)
 
 with open('words_backend/user1_words.json', 'r') as user1_words_file:
     user1_words = json.load(user1_words_file)
+
+# Import data from the Firestore
+# Project ID is determined by the GCLOUD_PROJECT environment variable
+db = firestore.Client()
+# Read 
+words_ref = db.collection(u'words')
+words_docs = words_ref.stream()
+# Fill the dict
+words = dict()
+for doc in words_docs:
+    words[doc.id] = doc.to_dict()
 
 
 def find_words_by_name(term):  # noqa: E501
@@ -62,15 +77,17 @@ def get_words(limit=None, status=None):  # noqa: E501
     # TODO(sgrade): check if needed
     # global words_learned
 
-    # Which words the user haven't learned yet?
+    # Initialize supporting list to store IDs of words to learn
     word_ids_to_learn = list()
+    # Initialize supporting list for words the user haven't learned yet
     words_not_learned = list()
     
+    # All IDs of existing words
     word_ids = list(words.keys())
 
     # Looking for word IDs to learn
-    # All words
     while len(word_ids_to_learn) < limit:
+        # Random word ID
         id = choice(word_ids)
 
         # Avoid duplicates

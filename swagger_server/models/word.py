@@ -14,18 +14,18 @@ class Word(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, name: str=None, imageurl: str=None):  # noqa: E501
+    def __init__(self, id: str=None, name: str=None, imageurl: str=None):  # noqa: E501
         """Word - a model defined in Swagger
 
         :param id: The id of this Word.  # noqa: E501
-        :type id: int
+        :type id: str
         :param name: The name of this Word.  # noqa: E501
         :type name: str
         :param imageurl: The imageurl of this Word.  # noqa: E501
         :type imageurl: str
         """
         self.swagger_types = {
-            'id': int,
+            'id': str,
             'name': str,
             'imageurl': str
         }
@@ -51,22 +51,22 @@ class Word(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def id(self) -> int:
+    def id(self) -> str:
         """Gets the id of this Word.
 
 
         :return: The id of this Word.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
     @id.setter
-    def id(self, id: int):
+    def id(self, id: str):
         """Sets the id of this Word.
 
 
         :param id: The id of this Word.
-        :type id: int
+        :type id: str
         """
 
         self._id = id

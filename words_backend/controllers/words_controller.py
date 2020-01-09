@@ -1,15 +1,14 @@
 import connexion
 import six
 
-from swagger_server.models.word import Word  # noqa: E501
-from swagger_server.models.words import Words  # noqa: E501
-from swagger_server import util
-
 import json
 from random import choice
-
 from google.cloud import firestore
-from swagger_server.models.words import Words
+
+from swagger_server.models.word import Word  # noqa: E501
+from swagger_server.models.words import Words   # noqa: E501
+from swagger_server import util
+
 
 """
 with open('words_backend/words.json', 'r') as words_file:
@@ -32,6 +31,7 @@ words_docs = words_ref.stream()
 words = dict()
 for doc in words_docs:
     words[doc.id] = doc.to_dict()
+    words[doc.id]['id'] = doc.id
 
 
 def find_words_by_name(term):  # noqa: E501

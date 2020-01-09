@@ -27,7 +27,7 @@ def delete_word(word_id, api_key=None):  # noqa: E501
      # noqa: E501
 
     :param word_id: Word id to delete
-    :type word_id: int
+    :type word_id: str
     :param api_key: 
     :type api_key: str
 
@@ -42,7 +42,7 @@ def get_word_by_id(word_id):  # noqa: E501
     Returns a single word # noqa: E501
 
     :param word_id: ID of word to return
-    :type word_id: int
+    :type word_id: str
 
     :rtype: Word
     """
@@ -70,7 +70,7 @@ def update_word_with_form(word_id, name=None, status=None):  # noqa: E501
      # noqa: E501
 
     :param word_id: ID of word that needs to be updated
-    :type word_id: int
+    :type word_id: str
     :param name: 
     :type name: str
     :param status: 
@@ -87,7 +87,7 @@ def upload_file(word_id, body=None):  # noqa: E501
      # noqa: E501
 
     :param word_id: ID of word to update
-    :type word_id: int
+    :type word_id: str
     :param body: 
     :type body: dict | bytes
 

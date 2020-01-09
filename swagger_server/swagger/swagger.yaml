@@ -8,7 +8,7 @@ info:
   license:
     name: MIT license
     url: https://github.com/sgrade/words-api/blob/master/LICENSE
-  version: 1.0.0
+  version: 1.0.1
 servers:
 - url: /
   description: basePath
@@ -70,8 +70,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
+          example: AjW1TOyy9NMDhKFFdLtT
       responses:
         "200":
           description: successful operation
@@ -100,8 +100,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
+          format: AjW1TOyy9NMDhKFFdLtT
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -131,8 +131,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
+          format: AjW1TOyy9NMDhKFFdLtT
       responses:
         "400":
           description: Invalid ID supplied
@@ -153,8 +153,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
+          format: AjW1TOyy9NMDhKFFdLtT
       requestBody:
         content:
           application/octet-stream:
@@ -685,8 +685,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          example: AjW1TOyy9NMDhKFFdLtT
         name:
           type: string
           example: cow
@@ -696,7 +696,7 @@ components:
       example:
         imageurl: cow.jpg
         name: cow
-        id: 0
+        id: AjW1TOyy9NMDhKFFdLtT
       xml:
         name: Word
     Words:

@@ -5,6 +5,7 @@ from swagger_server.models.api_response import ApiResponse  # noqa: E501
 from swagger_server.models.word import Word  # noqa: E501
 from swagger_server import util
 
+import config
 
 def create_word(body):  # noqa: E501
     """Create a new word in the database
@@ -45,8 +46,13 @@ def get_word_by_id(word_id):  # noqa: E501
     :type word_id: str
 
     :rtype: Word
-    """
     return 'do some magic!'
+    """
+     
+    if word_id in config.words.keys():
+        return config.words[word_id]
+    else:
+        return None
 
 
 def update_word(body):  # noqa: E501

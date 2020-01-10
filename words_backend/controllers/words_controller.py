@@ -3,35 +3,19 @@ import six
 
 import json
 from random import choice
-from google.cloud import firestore
 
 from swagger_server.models.word import Word  # noqa: E501
 from swagger_server.models.words import Words   # noqa: E501
 from swagger_server import util
 
+import config
 
-"""
-with open('words_backend/words.json', 'r') as words_file:
-    words = json.load(words_file)
-"""
 
 with open('words_backend/users.json', 'r') as users_file:
     users = json.load(users_file)
 
 with open('words_backend/user1_words.json', 'r') as user1_words_file:
     user1_words = json.load(user1_words_file)
-
-# Import data from the Firestore
-# Project ID is determined by the GCLOUD_PROJECT environment variable
-db = firestore.Client()
-# Read 
-words_ref = db.collection(u'words')
-words_docs = words_ref.stream()
-# Fill the dict
-words = dict()
-for doc in words_docs:
-    words[doc.id] = doc.to_dict()
-    words[doc.id]['id'] = doc.id
 
 
 def find_words_by_name(term):  # noqa: E501
@@ -47,7 +31,7 @@ def find_words_by_name(term):  # noqa: E501
     """
     
     output = list()
-    for word in list(words.values()):
+    for word in list(config.words.values()):
        if term in word['name']:
             output.append(word)
     return output
@@ -89,7 +73,7 @@ def get_words(limit=None, status=None):  # noqa: E501
     words_not_learned = list()
     
     # All IDs of existing words
-    word_ids = list(words.keys())
+    word_ids = list(config.words.keys())
 
     # Looking for word IDs to learn
     while len(word_ids_to_learn) < limit:
@@ -111,7 +95,7 @@ def get_words(limit=None, status=None):  # noqa: E501
     # Making list of words from the IDs
     words_to_learn = list()
     for word_id in word_ids_to_learn:
-        words_to_learn.append(words[word_id])
+        words_to_learn.append(config.words[word_id])
 
     # Have the user learned all the words and need to reset the learning?
     # TODO(sgrade)
@@ -134,7 +118,6 @@ def mark_word_learned(body):  # noqa: E501
         body = Word.from_dict(connexion.request.get_json())  # noqa: E501
 
         word_id = body.id
-        print(word_id)
 
         # JSON keys must be strings
         word_id_str = str(word_id)
@@ -152,7 +135,6 @@ def mark_word_learned(body):  # noqa: E501
         # with open('words_backend/user1_words.json', 'w') as user1_words_file:
         #     json.dump(user1_words, user1_words_file)
 
-        print(user1_words)
         return True
 
     return False

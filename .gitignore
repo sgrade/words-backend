@@ -111,6 +111,6 @@ venv.bak/
 # GCloud authorization
 words-backend-romank-*.json
 
-# Test scripts
+# Utility scripts
 test_*.py
-
+google_application_credentials.sh

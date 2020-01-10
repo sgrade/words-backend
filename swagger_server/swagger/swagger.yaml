@@ -268,7 +268,7 @@ paths:
         "400":
           description: Invalid status value
       x-openapi-router-controller: words_backend.controllers.words_controller
-  /words/findByName:
+  /words/findByName/{term}:
     get:
       tags:
       - words
@@ -292,13 +292,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Words'
+                  $ref: '#/components/schemas/Word'
                 x-content-type: application/json
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Words'
+                  $ref: '#/components/schemas/Word'
         "400":
           description: Invalid status value
       x-openapi-router-controller: words_backend.controllers.words_controller

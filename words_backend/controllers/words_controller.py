@@ -43,8 +43,14 @@ def find_words_by_name(term):  # noqa: E501
     :type term: str
 
     :rtype: List[Words]
-    """
     return 'do some magic!'
+    """
+    
+    output = list()
+    for word in list(words.values()):
+       if term in word['name']:
+            output.append(word)
+    return output
 
 
 def find_words_by_status(status):  # noqa: E501

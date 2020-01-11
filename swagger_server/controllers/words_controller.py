@@ -14,7 +14,7 @@ def find_words_by_name(term):  # noqa: E501
     :param term: Term to search in the names
     :type term: str
 
-    :rtype: List[Words]
+    :rtype: List[Word]
     """
     return 'do some magic!'
 

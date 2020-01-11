@@ -7,12 +7,13 @@ from swagger_server import util
 
 import config
 
-def create_word(body):  # noqa: E501
+
+def create_word(body=None):  # noqa: E501
     """Create a new word in the database
 
      # noqa: E501
 
-    :param body: Word object that needs to be added to the store
+    :param body: 
     :type body: dict | bytes
 
     :rtype: None
@@ -46,21 +47,16 @@ def get_word_by_id(word_id):  # noqa: E501
     :type word_id: str
 
     :rtype: Word
-    return 'do some magic!'
     """
-     
-    if word_id in config.words.keys():
-        return config.words[word_id]
-    else:
-        return None
+    return 'do some magic!'
 
 
-def update_word(body):  # noqa: E501
+def update_word(body=None):  # noqa: E501
     """Update an existing word
 
      # noqa: E501
 
-    :param body: Word object that needs to be added to the store
+    :param body: 
     :type body: dict | bytes
 
     :rtype: None

@@ -31,7 +31,10 @@ paths:
       summary: Update an existing word
       operationId: update_word
       requestBody:
-        $ref: '#/components/requestBodies/Word'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
       responses:
         "400":
           description: Invalid ID supplied
@@ -46,7 +49,10 @@ paths:
       summary: Create a new word in the database
       operationId: create_word
       requestBody:
-        $ref: '#/components/requestBodies/Word'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
       responses:
         "405":
           description: Invalid input

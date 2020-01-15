@@ -47,8 +47,13 @@ def get_word_by_id(word_id):  # noqa: E501
     :type word_id: str
 
     :rtype: Word
-    """
+
     return 'do some magic!'
+    """
+    if word_id in config.words.keys():
+        return config.words[word_id]
+    else:
+        return None
 
 
 def update_word(body=None):  # noqa: E501

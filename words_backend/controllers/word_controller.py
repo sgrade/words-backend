@@ -51,7 +51,7 @@ def get_word_by_id(word_id):  # noqa: E501
     return 'do some magic!'
     """
     if word_id in config.words.keys():
-        return config.words[word_id]
+        return config.words_ref.document(word_id).get().to_dict()
     else:
         return None
 
@@ -68,7 +68,15 @@ def update_word(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Word.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    
+    # Document reference in the database
+    config.doc_ref = config.words_ref.document(body.id)
+    
+    # Update the document
+    for attribute in body.attribute_map:
+        config.doc_ref.update({attribute: getattr(body, attribute)})
+
+    return True
 
 
 def update_word_with_form(word_id, name=None, status=None):  # noqa: E501

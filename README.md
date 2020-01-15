@@ -27,5 +27,7 @@ gcloud app deploy
 # Relevant GCP docs
 ## Store images 
 https://cloud.google.com/appengine/docs/flexible/python/serving-static-files
-## Python client for Firestore Database
+## Quickstart with Python and other servers
 https://cloud.google.com/firestore/docs/quickstart-servers
+## Firestore Python API
+https://googleapis.dev/python/firestore/latest/client.html

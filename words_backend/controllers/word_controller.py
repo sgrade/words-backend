@@ -6,7 +6,7 @@ from swagger_server.models.word import Word  # noqa: E501
 from swagger_server import util
 
 import config
-
+from google.cloud import storage
 
 def create_word(body=None):  # noqa: E501
     """Create a new word in the database
@@ -18,6 +18,9 @@ def create_word(body=None):  # noqa: E501
 
     :rtype: None
     """
+
+    """
+    # READY BUT COMMENTED OUT UNTIL SECURITY IS IMPLEMENTED"
     if connexion.request.is_json:
         body = Word.from_dict(connexion.request.get_json())  # noqa: E501
     
@@ -35,7 +38,7 @@ def create_word(body=None):  # noqa: E501
     doc_ref.set(body_dict)
     
     # print(doc_ref.get().to_dict())
-    
+    """
     return True
 
 
@@ -124,6 +127,33 @@ def upload_file(word_id, body=None):  # noqa: E501
 
     :rtype: ApiResponse
     """
+
+    """
+    # READY BUT COMMENTED OUT UNTIL SECURITY IS IMPLEMENTED"
+
     if connexion.request.is_json:
         body = Object.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    try:
+        doc_ref = config.words_ref.document(word_id)
+        name = doc_ref.get().to_dict()['name']
+        destination_blob_name = 'images/' + name
+    except:
+        print('Cannot get the filename')
+        return None
+    
+    # Uploads the file to the bucket.
+    # Instantiates a client
+    storage_client = storage.Client()
+    bucket = storage_client.bucket('words-storage-romank')
+    blob = bucket.blob(destination_blob_name)
+
+    # Upload the file
+    blob.upload_from_string(body)
+
+    # Update the filename in the Firestore database
+    doc_ref.update({'imageurl': name})
+
+    """
+
+    return True

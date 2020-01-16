@@ -24,10 +24,15 @@ python main.py
 # Deploy to Google Cloud
 gcloud app deploy
 
-# Relevant GCP docs
-## Store images 
-https://cloud.google.com/appengine/docs/flexible/python/serving-static-files
-## Quickstart with Python and other servers
+# Relevant Google Cloud docs
+## Firestore quickstart with Python and other servers
 https://cloud.google.com/firestore/docs/quickstart-servers
 ## Firestore Python API
 https://googleapis.dev/python/firestore/latest/client.html
+
+## Store images
+https://cloud.google.com/appengine/docs/flexible/python/serving-static-files
+## Uploade objects to Google Cloud Storage
+https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-python
+## Google Cloud Storage Python API
+https://googleapis.dev/python/storage/latest/index.html

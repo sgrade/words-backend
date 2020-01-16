@@ -56,10 +56,10 @@ paths:
       responses:
         "405":
           description: Invalid input
-      security:
-      - wordstore_auth:
-        - write:words
-        - read:words
+      # security:
+      # - wordstore_auth:
+        # - write:words
+        # - read:words
       x-openapi-router-controller: words_backend.controllers.word_controller
   /word/{wordId}:
     get:
@@ -695,10 +695,10 @@ components:
           example: AjW1TOyy9NMDhKFFdLtT
         name:
           type: string
-          example: cow
+          example: doggie
         imageurl:
           type: string
-          example: cow.jpg
+          example: doggie.jpg
       example:
         imageurl: cow.jpg
         name: cow

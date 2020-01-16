@@ -20,7 +20,23 @@ def create_word(body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = Word.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    
+    # Reference for new document in Words collection
+    doc_ref = config.words_ref.document()  
+    # ID of the document to be the Word ID
+    body.id = doc_ref.id
+    
+    # Create dictionary from the instance of Word class
+    body_dict = dict()
+    for attribute in body.attribute_map:
+        body_dict[attribute] = getattr(body, attribute)
+    
+    # Writing to the document
+    doc_ref.set(body_dict)
+    
+    # print(doc_ref.get().to_dict())
+    
+    return True
 
 
 def delete_word(word_id, api_key=None):  # noqa: E501
@@ -70,11 +86,11 @@ def update_word(body=None):  # noqa: E501
         body = Word.from_dict(connexion.request.get_json())  # noqa: E501
     
     # Document reference in the database
-    config.doc_ref = config.words_ref.document(body.id)
+    doc_ref = config.words_ref.document(body.id)
     
     # Update the document
     for attribute in body.attribute_map:
-        config.doc_ref.update({attribute: getattr(body, attribute)})
+        doc_ref.update({attribute: getattr(body, attribute)})
 
     return True
 

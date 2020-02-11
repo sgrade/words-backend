@@ -32,7 +32,7 @@ def find_words_by_name(term):  # noqa: E501
     
     output = list()
     for word in list(config.words.values()):
-       if term in word['name']:
+       if term.lower() in word['name']:
             output.append(word)
     return output
 

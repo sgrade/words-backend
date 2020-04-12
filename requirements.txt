@@ -1,6 +1,6 @@
 connexion
 python_dateutil
-setuptools >= 21.0.0
+setuptools
 flask_cors
 google-cloud-firestore
 google-cloud-storage
